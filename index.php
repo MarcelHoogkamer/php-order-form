@@ -17,7 +17,7 @@ function whatIsHappening() {
 }
 
 //your products with their price.
-$products = [
+$sandwiches = [
     ['name' => 'Club Ham', 'price' => 3.20],
     ['name' => 'Club Cheese', 'price' => 3],
     ['name' => 'Club Cheese & Ham', 'price' => 4],
@@ -25,7 +25,7 @@ $products = [
     ['name' => 'Club Salmon', 'price' => 5]
 ];
 
-$products = [
+$drinks = [
     ['name' => 'Cola', 'price' => 2],
     ['name' => 'Fanta', 'price' => 2],
     ['name' => 'Sprite', 'price' => 2],

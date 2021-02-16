@@ -144,14 +144,20 @@
             </div>
         </fieldset>
 
-        <fieldset>
-            <legend>Products</legend>
-            <?php foreach ($products AS $i => $product): ?>
-                <label>
-                    <input type="checkbox" value="1" name="products[<?php echo $i ?>]"/> <?php echo $product['name'] ?> -
-                    &euro; <?php echo number_format($product['price'], 2) ?></label><br />
-            <?php endforeach; ?>
-        </fieldset>
+        <?php
+        if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+            $url = "https://";
+        else
+            $url = "http://";
+        $url.= $_SERVER['HTTP_HOST'];
+        $url.= $_SERVER['REQUEST_URI'];
+
+        if ($url == 'http://localhost/php-order-form/index.php?food=0' || $url == 'https://localhost/php-order-form/index.php?food=0') {
+            include 'drinks.php';
+        } else {
+            include 'sandwiches.php';
+        }
+        ?>
 
         <label>
             <input type="checkbox" name="express_delivery" value="5" />
@@ -160,7 +166,15 @@
 
         <button type="submit" class="btn btn-primary">Order!</button>
     </form>
+    <?php if(isset($_POST['submit'])){
 
+            $_SESSION['name'] = $_POST['name'];
+            $_SESSION['email'] = $_POST['email'];
+            $_SESSION['street'] = $_POST['street'];
+            $_SESSION['streetnumber'] = $_POST['streetnumber'];
+            $_SESSION['city'] = $_POST['city'];
+            $_SESSION['zipcode'] = $_POST['zipcode'];
+        } ?>
     <footer>You already ordered <strong>&euro; <?php echo $totalValue ?></strong> in food and drinks.</footer>
 </div>
 
