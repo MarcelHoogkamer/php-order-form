@@ -1,0 +1,12 @@
+.logo {
+    height: 150px;
+    opacity: 1;
+}
+
+.logo:hover {
+    opacity: 0.5;
+}
+
+.error {
+    color: red;
+}
