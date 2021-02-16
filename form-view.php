@@ -35,7 +35,7 @@
         $street = test_input($_POST["street"]);
         $streetnumber = test_input($_POST["streetnumber"]);
         $city = test_input($_POST["city"]);
-        $zipcode= test_input($_POST["zipcode"]);
+        $zipcode = test_input($_POST["zipcode"]);
     }
 
     function test_input($data) {
@@ -76,10 +76,10 @@
         if (empty($_POST["streetnumber"])) {
             $streetnumberErr = "Number is required";
         } else {
-            if (is_numeric($streetnumber))  {
+            if ((is_numeric($streetnumber)) and (preg_match("/^[0-9]{1,4}$/",$streetnumber)))  {
                 $streetnumber = test_input($_POST["streetnumber"]);
             } else {
-                $streetnumberErr = "* Only numbers please";
+                $streetnumberErr = "* Please enter a maximum of 4 numbers, no letters";
             }
         }
 
@@ -95,10 +95,10 @@
         if (empty($_POST["zipcode"])) {
             $zipcodeErr = "Zipcode is required";
         } else {
-            if (is_numeric($zipcode))  {
+            if ((is_numeric($zipcode)) and (preg_match("/^[0-9]{1,4}$/",$zipcode)))  {
                 $zipcode = test_input($_POST["zipcode"]);
                 } else {
-                $zipcodeErr = "* Only numbers please";
+                $zipcodeErr = "* Please enter a maximum of 4 numbers, no letters";
             }
         }
 
@@ -160,9 +160,23 @@
         ?>
 
         <label>
-            <input type="checkbox" name="express_delivery" value="5" />
+            <input type="checkbox" name="express_delivery" id="express_delivery" value="yes" />
             Express delivery (+ 5 EUR)
         </label><br>
+
+        <?php
+
+        if(isset($_POST['express_delivery']) &&
+            $_POST['express_delivery'] == 'yes')
+        {
+            echo "Your order will be with you in 45 minutes, click: ";
+        }
+        else
+        {
+            echo "Within two hours your order will be with you, click: ";
+        }
+
+        ?>
 
         <button type="submit" class="btn btn-primary">Order!</button>
     </form>
