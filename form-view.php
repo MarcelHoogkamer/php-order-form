@@ -58,6 +58,9 @@
     $nameErr = $emailErr = $streetErr = $streetnumberErr = $cityErr = $zipcodeErr = "";
     $name = $email = $street = $streetnumber = $city = $zipcode = "";
 
+    $delivery_time = date("H:i:s", strtotime("+2 Hours"));
+    $formcheck = 0;
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = test_input($_POST["name"]);
         $email = test_input($_POST["email"]);
@@ -65,9 +68,6 @@
         $streetnumber = test_input($_POST["streetnumber"]);
         $city = test_input($_POST["city"]);
         $zipcode = test_input($_POST["zipcode"]);
-        $formcheck = 0;
-        $confirmation_msg = "";
-        $delivery_time = date("H:i:s", strtotime("+2 Hours"));
     }
 
     function test_input($data) {

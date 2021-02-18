@@ -24,7 +24,9 @@ $mailheader = "From: $email \r\n";
 <div class='result'>
 <?php echo "Thank You! <strong>$name</strong><br>";
 echo "Your e-mail address is: $email<br>";
-echo "You will hear from us shortly regarding your order!<br>";
+echo "Your order totals a value of: $totalValue";
+echo "Your order will be with you at: $delivery_time <br>"
+
 ?>
 </div>
 </body>
