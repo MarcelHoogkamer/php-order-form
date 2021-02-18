@@ -11,9 +11,16 @@
     <title>Order food & drinks</title>
 </head>
 <body>
+<?php
+  if (($_SERVER["REQUEST_METHOD"] == "POST") && (!empty($_POST["name"])) && (!empty($_POST["email"])) && (!empty($_POST["street"])) && (!empty($_POST["streetnumber"])) && (!empty($_POST["products"])) && (!empty($_POST["city"])) &&(!empty($_POST["zipcode"])))
+echo "<div class='alert alert-primary' role='alert'><span class='message'>Thank you for your order for a total of <strong>&euro; $totalValue </strong>!<br>
+Your order will be with you at: <strong>$delivery_time</strong></span></div>";
+  else echo "<div class='alert alert-warning' role='alert'><span class='message'>To complete your order, fill in all the information!</div>"; ?>
+
+
 <div class="container">
     <img class="logo" src="img/logo.png" alt="shaz'Ham logo">
-    <h1>Order your favourite sandwich from "shaz'Ham"</h1>
+    <h1>Place your order</h1>
     <nav>
         <ul class="nav">
             <li class="nav-item">
@@ -26,40 +33,10 @@
     </nav>
     <?php
 
-    if (!isset($_GET["food"])){
 
-        $products = [
-            ['name' => 'Club Ham', 'price' => 3.20],
-            ['name' => 'Club Cheese', 'price' => 3],
-            ['name' => 'Club Cheese & Ham', 'price' => 4],
-            ['name' => 'Club Chicken', 'price' => 4],
-            ['name' => 'Club Salmon', 'price' => 5]
-        ];
-        }
-
-        elseif ($_GET["food"] == 1) {
-
-            $products = [
-                ['name' => 'Club Ham', 'price' => 3.20],
-                ['name' => 'Club Cheese', 'price' => 3],
-                ['name' => 'Club Cheese & Ham', 'price' => 4],
-                ['name' => 'Club Chicken', 'price' => 4],
-                ['name' => 'Club Salmon', 'price' => 5]
-];}
-
-        else {
-            $products = [
-                ['name' => 'Cola', 'price' => 2],
-                ['name' => 'Fanta', 'price' => 2],
-                ['name' => 'Sprite', 'price' => 2],
-                ['name' => 'Ice-tea', 'price' => 3],
-            ];}
 
     $nameErr = $emailErr = $streetErr = $streetnumberErr = $cityErr = $zipcodeErr = "";
     $name = $email = $street = $streetnumber = $city = $zipcode = "";
-
-    $delivery_time = date("H:i:s", strtotime("+2 Hours"));
-    $formcheck = 0;
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = test_input($_POST["name"]);
@@ -79,74 +56,62 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($_POST["name"])) {
-            $nameErr = "Name is required";
+            $nameErr = "";
         } else {
             $name = test_input($_POST["name"]);
-            $formcheck++;
-            if (!preg_match("/^[a-zA-Z-' ]*$/",$name)) {
+            if (!preg_match("/^[a-zA-Z-' ]*$/", $name)) {
                 $nameErr = "* Only letters and white space allowed";
             }
         }
+    }
 
         if (empty($_POST["email"])) {
-            $emailErr = "Email is required";
+            $emailErr = "";
         } else {
             $email = test_input($_POST["email"]);
-            $formcheck++;
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $emailErr = "* Invalid email format";
             }
         }
 
         if (empty($_POST["street"])) {
-            $streetErr = "Street is required";
+            $streetErr = "";
         } else {
             $street = test_input($_POST["street"]);
-            $formcheck++;
             if (!preg_match("/^[a-zA-Z-' ]*$/",$street)) {
                 $streetErr = "* Only letters please";
             }
         }
 
         if (empty($_POST["streetnumber"])) {
-            $streetnumberErr = "Number is required";
+            $streetnumberErr = "";
         } else {
             if ((is_numeric($streetnumber)) and (preg_match("/^[0-9]{1,4}$/",$streetnumber)))  {
                 $streetnumber = test_input($_POST["streetnumber"]);
-                $formcheck++;
             } else {
                 $streetnumberErr = "* Please enter a maximum of 4 numbers, no letters";
             }
         }
 
         if (empty($_POST["city"])) {
-            $cityErr = "City is required";
+            $cityErr = "";
         } else {
             $city = test_input($_POST["city"]);
-            $formcheck++;
             if (!preg_match("/^[a-zA-Z-' ]*$/",$city)) {
                 $cityErr = "* Only letters and white space allowed";
             }
         }
 
         if (empty($_POST["zipcode"])) {
-            $zipcodeErr = "Zipcode is required";
+            $zipcodeErr = "";
         } else {
             if ((is_numeric($zipcode)) and (preg_match("/^[0-9]{1,4}$/",$zipcode)))  {
                 $zipcode = test_input($_POST["zipcode"]);
-                $formcheck++;
                 } else {
                 $zipcodeErr = "* Please enter a maximum of 4 numbers, no letters";
             }
         }
-        if (isset($_POST['express_delivery'])) {
-            $delivery_time = date("H:i:s", strtotime("+45 Minutes"));
-        }
 
-        if ($formcheck == 5) {
-            $confirmation_msg = "Thank you. Your order has been sent. The delivery time is " . $delivery_time;
-        }
-    }
 
     ?>
     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
@@ -193,25 +158,21 @@
                 <label>
                     <input type="checkbox" value="1" name="products[<?php echo $i ?>]" /> <?php echo $product['name'] ?> -
                     &euro; <?php echo number_format($product['price'], 2) ?></label><br />
-            <?php endforeach; ?>
+                <?php endforeach; ?>
         </fieldset>
         <label>
-            <input type="checkbox" name="express_delivery" id="express_delivery" value="yes" <?php if(isset($_POST['express_delivery'])) echo "checked"; ?> />
+            <input type="checkbox" name="express_delivery" id="express_delivery" value="5" <?php if(isset($_POST['express_delivery'])) echo "checked"; ?> />
             Express delivery (45 minutes, + 5 EUR)
         </label><br>
-        <button type="submit" class="btn btn-primary">Order!</button>
-    </form>
+        <button type="submit" class="btn btn-primary">Order!</button></form>
 
-    <?php echo "Current delivery time is: $delivery_time <br>" ?>
+
+    <?php echo "Current delivery time is: $delivery_time" ?>
+
 
     <br>
-    <?php $totalValue = 0;
 
-    if (isset($_POST["products"])){
-    foreach ($_POST["products"] AS $i => $price){
-    $totalValue += $products[$i]["price"];
-    }
-    } ?>
+
     <footer>You already ordered <strong>&euro; <?php echo $totalValue ?></strong> in this session.</footer>
 </div>
 

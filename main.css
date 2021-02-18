@@ -18,8 +18,15 @@
 
 footer {
     text-align: center;
+    margin: auto;
 }
 
 .estimate {
     text-align: center;
+    margin: auto;
+}
+
+.message {
+    text-align: center;
+    margin: auto;
 }
