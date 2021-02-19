@@ -3,6 +3,17 @@
 declare(strict_types=1);
 session_start();
 
+$cookie_name = "saved-orders";
+$expire = time() + (86400 * 30);
+
+if (isset($_COOKIE["saved-orders"])){
+    $totalValue = (float)$_COOKIE["saved-orders"];
+}
+else {
+    $totalValue = 0;
+    setcookie($cookie_name,(string)$totalValue,$expire);
+}
+
 if (!isset($_GET["food"])){
 
     $products = [
@@ -41,6 +52,7 @@ if (isset($_POST['express_delivery'])) {
 if (isset($_POST["products"])) {
     foreach ($_POST["products"] as $i => $price) {
         $totalValue += $products[$i]["price"];
+        setcookie($cookie_name,(string)$totalValue,$expire);
     }
 }
 
@@ -49,6 +61,5 @@ if (isset($_POST['express_delivery'])) {
 } else {
     $delivery_time = date("H:i:s", strtotime("+2 Hours"));
 }
-
 
 require 'form-view.php';

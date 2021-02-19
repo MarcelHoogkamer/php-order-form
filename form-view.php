@@ -56,17 +56,16 @@ Your order will be with you at: <strong>$delivery_time</strong></span></div>";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($_POST["name"])) {
-            $nameErr = "";
+            $nameErr = "This field is required";
         } else {
             $name = test_input($_POST["name"]);
             if (!preg_match("/^[a-zA-Z-' ]*$/", $name)) {
                 $nameErr = "* Only letters and white space allowed";
             }
         }
-    }
 
         if (empty($_POST["email"])) {
-            $emailErr = "";
+            $emailErr = "This field is required";
         } else {
             $email = test_input($_POST["email"]);
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -75,18 +74,18 @@ Your order will be with you at: <strong>$delivery_time</strong></span></div>";
         }
 
         if (empty($_POST["street"])) {
-            $streetErr = "";
+            $streetErr = "This field is required";
         } else {
             $street = test_input($_POST["street"]);
-            if (!preg_match("/^[a-zA-Z-' ]*$/",$street)) {
+            if (!preg_match("/^[a-zA-Z-' ]*$/", $street)) {
                 $streetErr = "* Only letters please";
             }
         }
 
         if (empty($_POST["streetnumber"])) {
-            $streetnumberErr = "";
+            $streetnumberErr = "This field is required";
         } else {
-            if ((is_numeric($streetnumber)) and (preg_match("/^[0-9]{1,4}$/",$streetnumber)))  {
+            if ((is_numeric($streetnumber)) and (preg_match("/^[0-9]{1,4}$/", $streetnumber))) {
                 $streetnumber = test_input($_POST["streetnumber"]);
             } else {
                 $streetnumberErr = "* Please enter a maximum of 4 numbers, no letters";
@@ -94,24 +93,24 @@ Your order will be with you at: <strong>$delivery_time</strong></span></div>";
         }
 
         if (empty($_POST["city"])) {
-            $cityErr = "";
+            $cityErr = "This field is required";
         } else {
             $city = test_input($_POST["city"]);
-            if (!preg_match("/^[a-zA-Z-' ]*$/",$city)) {
+            if (!preg_match("/^[a-zA-Z-' ]*$/", $city)) {
                 $cityErr = "* Only letters and white space allowed";
             }
         }
 
         if (empty($_POST["zipcode"])) {
-            $zipcodeErr = "";
+            $zipcodeErr = "This field is required";
         } else {
-            if ((is_numeric($zipcode)) and (preg_match("/^[0-9]{1,4}$/",$zipcode)))  {
+            if ((is_numeric($zipcode)) and (preg_match("/^[0-9]{1,4}$/", $zipcode))) {
                 $zipcode = test_input($_POST["zipcode"]);
-                } else {
+            } else {
                 $zipcodeErr = "* Please enter a maximum of 4 numbers, no letters";
             }
         }
-
+    }
 
     ?>
     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
