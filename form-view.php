@@ -12,10 +12,13 @@
 </head>
 <body>
 <?php
-  if (($_SERVER["REQUEST_METHOD"] == "POST") && (!empty($_POST["name"])) && (!empty($_POST["email"])) && (!empty($_POST["street"])) && (!empty($_POST["streetnumber"])) && (!empty($_POST["products"])) && (!empty($_POST["city"])) &&(!empty($_POST["zipcode"])))
+  if ($isValid) {
 echo "<div class='alert alert-primary' role='alert'><span class='message'>Thank you for your order for a total of <strong>&euro; $totalValue </strong>!<br>
 Your order will be with you at: <strong>$delivery_time</strong></span></div>";
-  else echo "<div class='alert alert-warning' role='alert'><span class='message'>To complete your order, fill in all the information!</div>"; ?>
+  }
+  else {
+      echo "<div class='alert alert-warning' role='alert'><span class='message'>To complete your order, fill in all the information!</div>";
+  }?>
 
 
 <div class="container">
@@ -32,53 +35,39 @@ Your order will be with you at: <strong>$delivery_time</strong></span></div>";
         </ul>
     </nav>
     <?php
+//    $nameErr = $emailErr = $streetErr = $streetnumberErr = $cityErr = $zipcodeErr = "";
 
-
-
-    $nameErr = $emailErr = $streetErr = $streetnumberErr = $cityErr = $zipcodeErr = "";
-    $name = $email = $street = $streetnumber = $city = $zipcode = "";
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $name = test_input($_POST["name"]);
-        $email = test_input($_POST["email"]);
-        $street = test_input($_POST["street"]);
-        $streetnumber = test_input($_POST["streetnumber"]);
-        $city = test_input($_POST["city"]);
-        $zipcode = test_input($_POST["zipcode"]);
+    function test_input(string $data) : string {
+        return trim(htmlspecialchars($data));
     }
 
-    function test_input($data) {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-    }
+    $errors = [];
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["email"], $_POST["name"])) {
         if (empty($_POST["name"])) {
-            $nameErr = "This field is required";
+            $errors['name'] = "This field is required";
         } else {
             $name = test_input($_POST["name"]);
             if (!preg_match("/^[a-zA-Z-' ]*$/", $name)) {
-                $nameErr = "* Only letters and white space allowed";
+                $errors[] = "* Only letters and white space allowed";
             }
         }
 
         if (empty($_POST["email"])) {
-            $emailErr = "This field is required";
+            $errors[] = "This field is required";
         } else {
             $email = test_input($_POST["email"]);
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $emailErr = "* Invalid email format";
+                $errors[] = "* Invalid email format";
             }
         }
 
         if (empty($_POST["street"])) {
-            $streetErr = "This field is required";
+            $errors[] = "This field is required";
         } else {
             $street = test_input($_POST["street"]);
             if (!preg_match("/^[a-zA-Z-' ]*$/", $street)) {
-                $streetErr = "* Only letters please";
+                $errors[] = "* Only letters please";
             }
         }
 
@@ -110,6 +99,12 @@ Your order will be with you at: <strong>$delivery_time</strong></span></div>";
                 $zipcodeErr = "* Please enter a maximum of 4 numbers, no letters";
             }
         }
+
+        if(count($errors)) {
+            die('errors found');
+        } else {
+            die('your form is valid!');
+        }
     }
 
     ?>
@@ -117,11 +112,11 @@ Your order will be with you at: <strong>$delivery_time</strong></span></div>";
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name" value="<?php echo $name;?>" class="form-control"/><span class="error"><?php echo $nameErr;?></span>
+                <input type="text" id="name" name="name" value="<?php echo $name ?? '';?>" class="form-control"/><span class="error"><?php echo $nameErr;?></span>
             </div>
             <div class="form-group col-md-6">
                 <label for="email">E-mail:</label>
-                <input type="text" id="email" name="email" value="<?php echo $email;?>" class="form-control"/><span class="error"><?php echo $emailErr;?></span>
+                <input type="text" id="email" name="email" value="<?php echo $email ?? '';?>" class="form-control"/><span class="error"><?php echo $emailErr;?></span>
             </div>
             <div></div>
         </div>
@@ -132,11 +127,11 @@ Your order will be with you at: <strong>$delivery_time</strong></span></div>";
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="street">Street:</label>
-                    <input type="text" name="street" id="street" value="<?php echo $street;?>" class="form-control"><span class="error"><?php echo $streetErr;?></span>
+                    <input type="text" name="street" id="street" value="<?php echo $street ?? '';?>" class="form-control"><span class="error"><?php echo $streetErr;?></span>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="streetnumber">Street number:</label>
-                    <input type="text" id="streetnumber" name="streetnumber" value="<?php echo $streetnumber;?>" class="form-control"><span class="error"><?php echo $streetnumberErr;?></span>
+                    <input type="text" id="streetnumber" name="streetnumber" value="<?php echo $streetnumber ?? '';?>" class="form-control"><span class="error"><?php echo $streetnumberErr;?></span>
                 </div>
             </div>
             <div class="form-row">
